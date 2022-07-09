@@ -30,9 +30,7 @@ class ServerlessPlugin {
     this.hooks = {
       'syncToS3:sync': this.syncDirectory.bind(this),
       'domainInfo:domainInfo': this.domainInfo.bind(this),
-      'invalidateCloudFrontCache:invalidateCache': this.invalidateCache.bind(
-        this,
-      ),
+      'invalidateCloudFrontCache:invalidateCache': this.invalidateCache.bind(this),
     };
   }
 
@@ -69,11 +67,10 @@ class ServerlessPlugin {
       '--delete',
     ];
     const { sterr } = this.runAwsCommand(args);
-    if (!sterr) {
-      this.serverless.cli.log('Successfully synced to the S3 bucket');
-    } else {
+    if (sterr) {
       throw new Error('Failed syncing to the S3 bucket');
     }
+    this.serverless.cli.log('Successfully synced to the S3 bucket');
   }
 
   // fetches the domain name from the CloudFront outputs and prints it out
@@ -89,18 +86,15 @@ class ServerlessPlugin {
     );
 
     const outputs = result.Stacks[0].Outputs;
-    const output = outputs.find(
-      entry => entry.OutputKey === 'WebAppCloudFrontDistributionOutput',
-    );
+    const output = outputs.find(entry => entry.OutputKey === 'WebAppCloudFrontDistributionOutput');
 
-    if (output && output.OutputValue) {
-      this.serverless.cli.log(`Web App Domain: ${output.OutputValue}`);
-      return output.OutputValue;
+    if (!output || !output.OutputValue) {
+      this.serverless.cli.log('Web App Domain: Not Found');
+      throw new Error('Could not extract Web App Domain');
     }
 
-    this.serverless.cli.log('Web App Domain: Not Found');
-    const error = new Error('Could not extract Web App Domain');
-    throw error;
+    this.serverless.cli.log(`Web App Domain: ${output.OutputValue}`);
+    return output.OutputValue;
   }
 
   async invalidateCache() {
@@ -117,9 +111,7 @@ class ServerlessPlugin {
     );
 
     const distributions = result.DistributionList.Items;
-    const distribution = distributions.find(
-      entry => entry.DomainName === domain,
-    );
+    const distribution = distributions.find(entry => entry.DomainName === domain);
 
     if (distribution) {
       this.serverless.cli.log(
@@ -134,16 +126,16 @@ class ServerlessPlugin {
         '"/*"',
       ];
       const { sterr } = this.runAwsCommand(args);
-      if (!sterr) {
-        this.serverless.cli.log('Successfully invalidated CloudFront cache');
-      } else {
+
+      if (sterr) {
         throw new Error('Failed invalidating CloudFront cache');
       }
+
+      this.serverless.cli.log('Successfully invalidated CloudFront cache');
     } else {
       const message = `Could not find distribution with domain ${domain}`;
-      const error = new Error(message);
       this.serverless.cli.log(message);
-      throw error;
+      throw new Error(message);
     }
   }
 }
