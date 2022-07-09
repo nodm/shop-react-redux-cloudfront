@@ -1,3 +1,9 @@
+
+## Module 02: Serving SPA in AWS
+* [CloudFront URL](https://d2oxj55y64zodz.cloudfront.net/)
+* [S3-website](https://shop-aws-react-redux.s3.amazonaws.com/index.html)
+
+---
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
