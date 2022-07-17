@@ -1,3 +1,6 @@
+## Module 03: Serverless API
+* [Page that uses `/product` endpoint](https://d2oxj55y64zodz.cloudfront.net/)
+* [Page that uses `/product/{id}` endpoint](https://d2oxj55y64zodz.cloudfront.net/admin/product-form/28a50b67-3388-4512-bcea-10faf6d7bbfa)
 
 ## Module 02: Serving SPA in AWS
 * [CloudFront URL](https://d2oxj55y64zodz.cloudfront.net/)
