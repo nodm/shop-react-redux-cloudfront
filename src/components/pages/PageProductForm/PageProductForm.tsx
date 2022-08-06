@@ -107,9 +107,22 @@ export default function PageProductForm() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const onSubmit = (values: FormikValues) => {
+    const imageUrl = `https://loremflickr.com/640/480/business?${Math.ceil(Math.random() * 1_000)}`;
     const formattedValues = ProductSchema.cast(values);
-    const productToSave = id ? {...ProductSchema.cast(formattedValues), id} : formattedValues;
-    axios.put(`${API_PATHS.bff}/product`, productToSave)
+
+    if (id) {
+      const updatedProduct = {
+        ...ProductSchema.cast(formattedValues),
+        imageUrl,
+        id
+      };
+      axios.put(`${API_PATHS.product}/product`, updatedProduct)
+        .then(() => history.push('/admin/products'));
+      return;
+    }
+
+    const newProduct = { ...formattedValues, imageUrl};
+    axios.post(`${API_PATHS.product}/product`, newProduct)
       .then(() => history.push('/admin/products'));
   };
 
