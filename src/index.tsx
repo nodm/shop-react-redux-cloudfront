@@ -13,8 +13,17 @@ axios.interceptors.response.use(
     return response;
   },
   function(error) {
-    if (error?.response?.status === 400) {
-      alert(error.response.data?.data);
+    const statusCode = error?.response?.status;
+    switch (statusCode) {
+      case 400:
+        alert(error.response.data?.data);
+        break;
+      case 401:
+        alert('You need to log into application to perform the action (401).');
+        break;
+      case 403:
+        alert('Your don\'t have permissions to perform the action (403).');
+        break;
     }
 
     return Promise.reject(error?.response ?? error);
