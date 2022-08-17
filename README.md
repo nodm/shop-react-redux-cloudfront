@@ -1,3 +1,11 @@
+## Module 07: Authorization
+
+To make requests as an authorized customer (to import products from a CSV file):
+* generate an authorization token by running ```Buffer.from(`${userName}::${password}`).toString('base64')```
+  _(replace `userName` and `password` as described in the task)_.
+* create in the `localStorage` an item with the key `authorization_token` and generated on the previous step token as
+  the value (do not add `Basic ` at the beginning). 
+
 ## Module 03: Serverless API
 * [Page that uses `/product` endpoint](https://d2oxj55y64zodz.cloudfront.net/)
 * [Page that uses `/product/{id}` endpoint](https://d2oxj55y64zodz.cloudfront.net/admin/product-form/28a50b67-3388-4512-bcea-10faf6d7bbfa)
