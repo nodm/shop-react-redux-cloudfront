@@ -116,13 +116,13 @@ export default function PageProductForm() {
         imageUrl,
         id
       };
-      axios.put(`${API_PATHS.product}/product`, updatedProduct)
+      axios.put(`${API_PATHS.bff}/product`, updatedProduct)
         .then(() => history.push('/admin/products'));
       return;
     }
 
     const newProduct = { ...formattedValues, imageUrl};
-    axios.post(`${API_PATHS.product}/product`, newProduct)
+    axios.post(`${API_PATHS.bff}/product`, newProduct)
       .then(() => history.push('/admin/products'));
   };
 
@@ -131,7 +131,7 @@ export default function PageProductForm() {
       setIsLoading(false);
       return;
     }
-    axios.get(`${API_PATHS.product}/products/${id}`)
+    axios.get(`${API_PATHS.bff}/product/${id}`)
       .then(res => {
         setProduct(res.data.product);
         setIsLoading(false);
